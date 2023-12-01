@@ -1,3 +1,4 @@
+
 <#
 .SYNOPSIS
     Run tests
@@ -19,6 +20,8 @@ param (
 
 function Set-TestName{
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope='Function')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope='Function')]
     [Alias("st")]
     param (
         [Parameter(Position=0,ValueFromPipeline)][string]$TestName
@@ -31,6 +34,8 @@ function Set-TestName{
 
 function Clear-TestName{
     [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope='Function')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Scope='Function')]
     [Alias("ct")]
     param (
     )
@@ -45,13 +50,13 @@ function Import-TestingHelper{
         [Parameter()][switch]$AllowPrerelease,
         [Parameter()][switch]$PassThru
     )
-    
+
     if ($Version) {
         $V = $Version.Split('-')
         $semVer = $V[0]
         $AllowPrerelease = ($AllowPrerelease -or ($null -ne $V[1]))
     }
-    
+
     $module = Import-Module TestingHelper -PassThru -ErrorAction SilentlyContinue -RequiredVersion:$semVer
 
     if ($null -eq $module) {
@@ -67,11 +72,11 @@ function Import-TestingHelper{
 Import-TestingHelper -AllowPrerelease
 
 # Run test by PSD1 file
-# Test-ModulelocalPSD1 -ShowTestErrors:$ShowTestErrors 
+# Test-ModulelocalPSD1 -ShowTestErrors:$ShowTestErrors
 # Test-ModulelocalPSD1 -ShowTestErrors:$ShowTestErrors -TestName StagingModuleTest_*
 
 if($TestName){
-    Invoke-TestingHelper -TestName $TestName
+    Invoke-TestingHelper -TestName $TestName -ShowTestErrors:$ShowTestErrors
 } else {
-    Invoke-TestingHelper 
+    Invoke-TestingHelper -ShowTestErrors:$ShowTestErrors
 }
