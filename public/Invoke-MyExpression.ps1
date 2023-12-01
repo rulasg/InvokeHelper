@@ -1,3 +1,21 @@
+<#
+.SYNOPSIS
+Execute the command
+
+.DESCRIPTION
+
+
+.PARAMETER Command
+Expression to be executed
+
+.OUTPUTS
+Return of the expression
+
+.EXAMPLE
+Invoke-MyExpression -Command 'gh api user'
+
+#>
+
 function Invoke-MyExpression {
     [CmdletBinding(SupportsShouldProcess)]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingInvokeExpression', '', Scope='Function')]
@@ -13,5 +31,4 @@ function Invoke-MyExpression {
     }
 
     return $result
-    
 } Export-ModuleMember -Function Invoke-MyExpression
