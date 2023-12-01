@@ -1,3 +1,4 @@
+
 <#
 .SYNOPSIS
     Run tests
@@ -7,16 +8,40 @@
     Using TestingHelper this script will search for a Test module and run the tests
     This script will be referenced from launch.json to run the tests on VSCode
 .LINK
-    https://raw.githubusercontent.com/rulasg/DemoPsModule/main/test.ps1
+    https://raw.githubusercontent.com/rulasg/StagingModule/main/test.ps1
 .EXAMPLE
     > ./test.ps1
 #>
 
 [CmdletBinding()]
 param (
-    #Switch ShowTestErrors
     [Parameter()][switch]$ShowTestErrors
 )
+
+function Set-TestName{
+    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope='Function')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseShouldProcessForStateChangingFunctions', '', Scope='Function')]
+    [Alias("st")]
+    param (
+        [Parameter(Position=0,ValueFromPipeline)][string]$TestName
+    )
+
+    process{
+        $global:TestName = $TestName
+    }
+}
+
+function Clear-TestName{
+    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope='Function')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Scope='Function')]
+    [Alias("ct")]
+    param (
+    )
+
+    $global:TestName = $null
+}
 
 function Import-TestingHelper{
     [CmdletBinding()]
@@ -25,13 +50,13 @@ function Import-TestingHelper{
         [Parameter()][switch]$AllowPrerelease,
         [Parameter()][switch]$PassThru
     )
-    
+
     if ($Version) {
         $V = $Version.Split('-')
         $semVer = $V[0]
         $AllowPrerelease = ($AllowPrerelease -or ($null -ne $V[1]))
     }
-    
+
     $module = Import-Module TestingHelper -PassThru -ErrorAction SilentlyContinue -RequiredVersion:$semVer
 
     if ($null -eq $module) {
@@ -47,4 +72,11 @@ function Import-TestingHelper{
 Import-TestingHelper -AllowPrerelease
 
 # Run test by PSD1 file
-Invoke-TestingHelper -ShowTestErrors:$ShowTestErrors
+# Test-ModulelocalPSD1 -ShowTestErrors:$ShowTestErrors
+# Test-ModulelocalPSD1 -ShowTestErrors:$ShowTestErrors -TestName StagingModuleTest_*
+
+if($TestName){
+    Invoke-TestingHelper -TestName $TestName -ShowTestErrors:$ShowTestErrors
+} else {
+    Invoke-TestingHelper -ShowTestErrors:$ShowTestErrors
+}
