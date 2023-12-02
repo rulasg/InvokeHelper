@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-Execute the command 
+Execute the command
 
 .DESCRIPTION
 The command will generate a Json that the fun will serialize to a PSObject
@@ -18,6 +18,8 @@ Invoke-MyExpressionJson -Command 'gh api user'
 
 function Invoke-MyExpressionJson {
     [CmdletBinding(SupportsShouldProcess)]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Scope='Function')]
+    # False positive. We need -WhatIf to call later Invoke-MyExpression with this preferences
     param(
         [Parameter(Position=0)][string]$Command
     )
@@ -27,5 +29,4 @@ function Invoke-MyExpressionJson {
    $result = $resultJson | ConvertFrom-Json
 
     return $result
-    
 } Export-ModuleMember -Function Invoke-MyExpressionJson
