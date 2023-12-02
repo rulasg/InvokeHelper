@@ -24,7 +24,7 @@ function Invoke-MyExpression {
     )
 
     if ($PSCmdlet.ShouldProcess("Target", $command)) {
-        $result = Invoke-Expression $Command | ConvertFrom-Json
+        $result = Invoke-Expression $Command
     } else {
         Write-Information $command
         $result = $null
