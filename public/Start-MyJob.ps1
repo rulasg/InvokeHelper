@@ -10,7 +10,7 @@ The Job started.
 #>
 
 function Start-MyJob{
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         # ScriptBlock
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command
@@ -19,7 +19,12 @@ function Start-MyJob{
 
         $ScriptBlock = [ScriptBlock]::Create($Command)
 
-        $job = Start-Job -ScriptBlock $ScriptBlock
+        if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
+            $job = Start-Job -ScriptBlock $ScriptBlock
+        } else {
+            Write-Information $command
+            $job = Start-Job -ScriptBlock {$null}
+        }
 
         return $job
     }
