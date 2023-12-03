@@ -17,10 +17,10 @@ function Start-MyJob{
     )
     process {
 
-        $ScriptBlock = [ScriptBlock]::Create($Command)
+        $scriptBlock  = Build-ScriptBlock -Command $Command
 
         if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
-            $job = Start-Job -ScriptBlock $ScriptBlock
+            $job = Start-Job -ScriptBlock $scriptBlock
         } else {
             Write-Information $command
             $job = Start-Job -ScriptBlock {$null}
