@@ -24,3 +24,15 @@ function Get-MockFunctionCall{
 
     return $result
 } Export-ModuleMember -Function Get-MockFunctionCall
+
+function Get-MockFunctionCallAsync{
+    [CmdletBinding()]
+    param()
+
+    # $command = $CommandList[[CmdKey]::GetUser)]
+    $command = $CommandList.[CmdKey]::GetUser
+
+    $job = Start-MyJob -Command $command
+    
+    return $job
+} Export-ModuleMember -Function Get-MockFunctionCallAsync
