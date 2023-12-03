@@ -5,6 +5,6 @@ function InvokeHelperTest_MockFunctionCall{
     Set-InvokeCommand -CommandKey 'gh api user' -Command ' echo "Hello World" '
 
     $result = Get-MockFunctionCall
-    
+
     Assert-AreEqual -Expected "Hello World" -Presented $result
 }

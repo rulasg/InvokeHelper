@@ -1,5 +1,6 @@
 function Build-ScriptBlock{
     [CmdletBinding()]
+    [OutputType([ScriptBlock])]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command
     )
@@ -14,4 +15,4 @@ function Build-ScriptBlock{
         $ScriptBlock = [ScriptBlock]::Create($cmd)
         return $ScriptBlock
     }
-} 
+}

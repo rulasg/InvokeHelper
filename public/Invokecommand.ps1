@@ -1,19 +1,38 @@
+
+$script:InvokeCommands = @{}
+
+<#
+.SYNOPSIS
+Set Command list with the key and command
+#>
 function Set-InvokeCommand{
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey,
         [Parameter(Mandatory,ValueFromPipeline,Position=1)][string]$Command
     )
     process {
-        $InvokeCommands[$CommandKey] = $Command
+        if ($PSCmdlet.ShouldProcess("CommandList", "Set $CommandKey = $Command")) {
+            $InvokeCommands[$CommandKey] = $Command
+        }
     }
 } Export-ModuleMember -Function Set-InvokeCommand
 
+
+<#
+.SYNOPSIS
+Reset Command list
+#>
 function Reset-InvokeCommand{
-    [CmdletBinding()]
+    [CmdletBinding(SupportsShouldProcess)]
     param()
     process {
-        $script:InvokeCommands=@{}
+        if ($PSCmdlet.ShouldProcess("CommandList", "Reset")) {
+            $InvokeCommands = @{}
+        }
+
+        "$InvokeCommands" | Write-Verbose
+
     }
 } Export-ModuleMember -Function Reset-InvokeCommand
 
