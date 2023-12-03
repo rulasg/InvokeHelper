@@ -12,21 +12,21 @@ Expression to be executed. This expresion will generate a Json
 Return of the expression
 
 .EXAMPLE
-Invoke-MyExpressionJson -Command 'gh api user'
+Invoke-MyCommandJson -Command 'gh api user'
 
 #>
 
-function Invoke-MyExpressionJson {
+function Invoke-MyCommandJson {
     [CmdletBinding(SupportsShouldProcess)]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Scope='Function')]
-    # False positive. We need -WhatIf to call later Invoke-MyExpression with this preferences
+    # False positive. We need -WhatIf to call later Invoke-MyCommand with this preferences
     param(
         [Parameter(Position=0)][string]$Command
     )
 
-   $resultJson = Invoke-MyExpression -Command $Command
+   $resultJson = Invoke-MyCommand -Command $Command
 
    $result = $resultJson | ConvertFrom-Json
 
     return $result
-} Export-ModuleMember -Function Invoke-MyExpressionJson
+} Export-ModuleMember -Function Invoke-MyCommandJson
