@@ -28,6 +28,5 @@ function Start-MyJob{
 
         return $job
     }
-
 } Export-ModuleMember -Function Start-MyJob
 

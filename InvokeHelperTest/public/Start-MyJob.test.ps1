@@ -42,12 +42,10 @@ function InvokeHelperTest_JobInternal_Start_MultiCall{
         }
 
         $result = Wait-Job -Job $jobs
+        Assert-Count -Expected $number -Presented $result
     }
-    
+
     "Used $measure.milliseconds milliseconds to run 5 jobs of $milliseconds milliseconds." | Write-Verbose
-
-    Assert-Count -Expected $number -Presented $result
-
     Assert-IsTrue -Condition ($measure.milliseconds -lt ($number * $milliSeconds))
 
 }
