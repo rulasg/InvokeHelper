@@ -18,6 +18,25 @@ function Set-InvokeCommand{
     }
 } Export-ModuleMember -Function Set-InvokeCommand
 
+function Test-InvokeCommand{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey
+    )
+    process {
+        return $InvokeCommands.ContainsKey($CommandKey)
+    }
+}
+
+function Get-InvokeCommand{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey
+    )
+    process {
+        return $InvokeCommands[$CommandKey]
+    }
+}
 
 <#
 .SYNOPSIS

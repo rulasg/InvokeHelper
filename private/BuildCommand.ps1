@@ -6,8 +6,8 @@ function Build-ScriptBlock{
     )
     process {
 
-        if($InvokeCommands.ContainsKey($Command)){
-            $cmd = $InvokeCommands[$Command]
+        if(Test-InvokeCommand -Command $Command){
+            $cmd = Get-InvokeCommand -Command $Command
         } else {
             $cmd = $Command
         }
