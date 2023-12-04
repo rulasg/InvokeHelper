@@ -12,7 +12,6 @@ The Job started.
 function Start-MyJob{
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        # ScriptBlock
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command
     )
     process {
@@ -22,7 +21,7 @@ function Start-MyJob{
         if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
             $job = Start-Job -ScriptBlock $scriptBlock
         } else {
-            Write-Information $command
+            Write-Information $scriptBlock
             $job = Start-Job -ScriptBlock {$null}
         }
 

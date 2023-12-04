@@ -11,7 +11,7 @@ $CommandList =@{
 
 <#
 .SYNOPSIS
-Will start a job with the given command.
+Will invoke a command
 #>
 function Get-MockFunctionCall{
     [CmdletBinding()]
@@ -25,6 +25,10 @@ function Get-MockFunctionCall{
     return $result
 } Export-ModuleMember -Function Get-MockFunctionCall
 
+<#
+.SYNOPSIS
+Will start a job with the given command.
+#>
 function Get-MockFunctionCallAsync{
     [CmdletBinding()]
     param()
@@ -33,6 +37,6 @@ function Get-MockFunctionCallAsync{
     $command = $CommandList.[CmdKey]::GetUser
 
     $job = Start-MyJob -Command $command
-    
+
     return $job
 } Export-ModuleMember -Function Get-MockFunctionCallAsync
