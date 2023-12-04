@@ -15,14 +15,13 @@ function InvokeHelperTest_MyCommand_Invoke_WhatIF{
     Assert-Contains -Expected $command -Presented $infoVar
 }
 
-function InvokeHelperTest_Invoke_MyComand_WithMock {
+function InvokeHelperTest_Invoke_MyCommand_WithMock {
     [CmdletBinding()]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope='Function')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Scope='Function')]
     param()
 
-    $global:test_json = '{"login": "fakeName","id": 6666666}'
-    $comand = 'echo $global:test_json'
+    # $global:test_json = '{"login": "fakeName","id": 6666666}'
+    # $comand = 'echo $global:test_json'
+    $comand = '@{login = "FakeName"; id="6666666"} | ConvertTo-Json'
 
     # Set the mock you want to use based on a CommandKey the function will use
     Set-MockInvokeCommand -CommandKey 'Command to call to Mock' -Command $comand
@@ -37,12 +36,9 @@ function InvokeHelperTest_Invoke_MyComand_WithMock {
 
 function InvokeHelperTest_MyCommandJson_Invoke{
     [CmdletBinding()]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope='Function')]
-    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Scope='Function')]
     param()
 
-    $global:test_json = '{"login": "fakeName","id": 6666666}'
-    $comand = 'echo $global:test_json'
+    $comand = '@{login = "FakeName"; id="6666666"} | ConvertTo-Json'
 
     $result = Invoke-MyCommandJson -Command $comand
 
