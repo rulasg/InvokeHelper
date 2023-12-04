@@ -133,7 +133,7 @@ function InvokeHelperTest_MyCommandAsync_Invoke_Multiple_StingArray_WithMock{
         Assert-Count -Expected $number -Presented $result
     }
 
-    # Meausre that all the calls take less that 
+    # Meausre that all the calls take less that
     "Used $measure.milliseconds milliseconds to run 5 jobs of $milliseconds milliseconds." | Write-Verbose
     Assert-IsTrue -Condition ($measure.milliseconds -lt ($number * $milliSeconds))
 
