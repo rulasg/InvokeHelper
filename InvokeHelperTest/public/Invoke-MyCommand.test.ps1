@@ -9,7 +9,7 @@ function InvokeHelperTest_MyCommand_Invoke_WhatIF{
 
 function InvkeHelperTest_Invoke_MyComandWithKey {
 
-    Set-InvokeCommand -CommandKey GhGetUser -Command 'gh api user'
+    Set-MockInvokeCommand -CommandKey GhGetUser -Command 'gh api user'
 
     $result = Invoke-MyCommandJson -Command 'GhGetUser'
 

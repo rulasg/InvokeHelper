@@ -1,11 +1,11 @@
 
-$script:InvokeCommands = @{}
+$script:MockInvokeCommands = @{}
 
 <#
 .SYNOPSIS
 Set Command list with the key and command
 #>
-function Set-InvokeCommand{
+function Set-MockInvokeCommand{
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey,
@@ -13,28 +13,28 @@ function Set-InvokeCommand{
     )
     process {
         if ($PSCmdlet.ShouldProcess("CommandList", "Set $CommandKey = $Command")) {
-            $InvokeCommands[$CommandKey] = $Command
+            $MockInvokeCommands[$CommandKey] = $Command
         }
     }
-} Export-ModuleMember -Function Set-InvokeCommand
+} Export-ModuleMember -Function Set-MockInvokeCommand
 
-function Test-InvokeCommand{
+function Test-MockInvokeCommand{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey
     )
     process {
-        return $InvokeCommands.ContainsKey($CommandKey)
+        return $MockInvokeCommands.ContainsKey($CommandKey)
     }
 }
 
-function Get-InvokeCommand{
+function Get-MockInvokeCommand{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey
     )
     process {
-        return $InvokeCommands[$CommandKey]
+        return $MockInvokeCommands[$CommandKey]
     }
 }
 
@@ -42,18 +42,18 @@ function Get-InvokeCommand{
 .SYNOPSIS
 Reset Command list
 #>
-function Reset-InvokeCommand{
+function Reset-MockInvokeCommand{
     [CmdletBinding(SupportsShouldProcess)]
     param()
     process {
         if ($PSCmdlet.ShouldProcess("CommandList", "Reset")) {
-            $InvokeCommands = @{}
+            $MockInvokeCommands = @{}
         }
 
-        "$InvokeCommands" | Write-Verbose
+        "$MockInvokeCommands" | Write-Verbose
 
     }
-} Export-ModuleMember -Function Reset-InvokeCommand
+} Export-ModuleMember -Function Reset-MockInvokeCommand
 
 # Reset Invoke Commands
-Reset-InvokeCommand
+Reset-MockInvokeCommand
