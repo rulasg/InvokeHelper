@@ -16,21 +16,24 @@ Invoke-MyCommand -Command 'gh api user'
 function Invoke-MyCommand {
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Position=0)][string]$Command
+        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command
     )
 
-    if ($PSCmdlet.ShouldProcess("Target", $command)) {
+    process{
 
         $scriptBlock = Build-ScriptBlock -Command $Command
 
-        $result = Invoke-Command -ScriptBlock $scriptBlock
+        if ($PSCmdlet.ShouldProcess("Target", $command)) {
 
-    } else {
-        Write-Information $command
-        $result = $null
+            $result = Invoke-Command -ScriptBlock $scriptBlock
+
+        } else {
+            Write-Information $scriptBlock
+            $result = $null
+        }
+
+        return $result
     }
-
-    return $result
 } Export-ModuleMember -Function Invoke-MyCommand
 
 <#
