@@ -1,3 +1,11 @@
+function InvokeHelperTest_MyCommand_Invoke{
+
+    $command = 'echo "Hello world"'
+    $result = Invoke-MyCommand -Command $command
+
+    Assert-AreEqual  -Expected "Hello world" -Presented $result
+}
+
 function InvokeHelperTest_MyCommand_Invoke_WhatIF{
 
     $command = "comand text"
@@ -7,13 +15,23 @@ function InvokeHelperTest_MyCommand_Invoke_WhatIF{
     Assert-Contains -Expected $command -Presented $infoVar
 }
 
-function InvkeHelperTest_Invoke_MyComandWithKey {
+function InvokeHelperTest_Invoke_MyComand_WithMock {
+    [CmdletBinding()]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidGlobalVars', '', Scope='Function')]
+    [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Scope='Function')]
+    param()
 
-    Set-MockInvokeCommand -CommandKey GhGetUser -Command 'gh api user'
+    $global:test_json = '{"login": "fakeName","id": 6666666}'
+    $comand = 'echo $global:test_json'
 
-    $result = Invoke-MyCommandJson -Command 'GhGetUser'
+    # Set the mock you want to use based on a CommandKey the function will use
+    Set-MockInvokeCommand -CommandKey 'Command to call to Mock' -Command $comand
 
-    Assert-AreEqual -Expected 'rulasg' -Presented $result.login
+    # Call the function with the CommandKey as normal
+    $result = Invoke-MyCommandJson -Command 'Command to call to Mock'
+
+    Assert-AreEqual -Expected 'fakeName' -Presented $result.login
+    Assert-AreEqual -Expected 6666666 -Presented $result.id
 
 }
 
@@ -23,11 +41,11 @@ function InvokeHelperTest_MyCommandJson_Invoke{
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Scope='Function')]
     param()
 
-    $global:test_json = '{"login": "rulasg","id": 6884408}'
+    $global:test_json = '{"login": "fakeName","id": 6666666}'
     $comand = 'echo $global:test_json'
 
     $result = Invoke-MyCommandJson -Command $comand
 
-    Assert-AreEqual -Expected "rulasg" -Presented $result.login
-    Assert-AreEqual -Expected 6884408 -Presented $result.id
+    Assert-AreEqual -Expected "fakeName" -Presented $result.login
+    Assert-AreEqual -Expected 6666666 -Presented $result.id
 }
