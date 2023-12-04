@@ -27,16 +27,16 @@ function Invoke-MyCommandAsync {
     end{
 
         $cmds | ForEach-Object {
-            
+
             $scriptBlock  = Build-ScriptBlock -Command $_
-            
+
             if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
                 $job = Start-Job -ScriptBlock $scriptBlock
             } else {
                 Write-Information $scriptBlock
                 $job = Start-Job -ScriptBlock {$null}
             }
-            
+
             $jobs += $job
         }
 

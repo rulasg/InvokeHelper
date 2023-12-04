@@ -55,5 +55,5 @@ function Reset-MockInvokeCommand{
     }
 } Export-ModuleMember -Function Reset-MockInvokeCommand
 
-# Reset Invoke Commands
+# Initilize $MockInvokeCommands
 Reset-MockInvokeCommand

@@ -103,3 +103,41 @@ function InvokeHelperTest_MyCommandAsync_Invoke_Multiple_StingArray{
     }
 
 }
+
+function InvokeHelperTest_MyCommandAsync_Invoke_Multiple_StingArray_WithMock{
+    $milliSeconds = 200
+    $number = 5
+
+    $commands = @()
+    $commandPattern = 'Command with number {number}"'
+    $comandMockPattern = 'Start-Sleep -Milliseconds {milliseconds} ; @{login = "FakeName"; id="{number}"}'
+    $comandMockPattern = $comandMockPattern -replace '{milliseconds}', $milliSeconds
+
+    $commands = @()
+
+    # Mock all the calls to commands
+    1..$number | ForEach-Object {
+
+        $command = $commandPattern -replace '{number}', $_
+        $commandMock = $comandMockPattern -replace '{number}', $_
+        Set-MockInvokeCommand -CommandKey $command -Command $commandMock
+
+        $commands += $command
+    }
+
+    # Call asyn all commands in $commands
+    $measure = Measure-Command {
+
+        $result = Invoke-MyCommandAsync -Commands $commands
+
+        Assert-Count -Expected $number -Presented $result
+    }
+
+    # Meausre that all the calls take less that 
+    "Used $measure.milliseconds milliseconds to run 5 jobs of $milliseconds milliseconds." | Write-Verbose
+    Assert-IsTrue -Condition ($measure.milliseconds -lt ($number * $milliSeconds))
+
+    1..$number | ForEach-Object {
+        Assert-Contains  -Expected $_ -Presented $result.Id
+    }
+}
