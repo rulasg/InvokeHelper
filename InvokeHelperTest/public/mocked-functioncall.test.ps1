@@ -7,7 +7,7 @@ function InvokeHelperTest_MockFunctionCall{
     Import-Module -name $clientModulePath -Force
 
     # Set the mock to a valid command
-    Set-MockInvokeCommand -CommandKey 'gh api user' -Command ' echo "Hello World" '
+    Set-InvokeCommand -CommandKey 'gh api user' -Command ' echo "Hello World" '
 
     # Call the module funtion
     $result = Get-MockFunctionCall
@@ -20,7 +20,7 @@ function InvokeHelperTest_MockFunctionCallAsync{
     $clientModulePath = $PSScriptRoot | Split-Path -Parent | Join-Path -ChildPath private -AdditionalChildPath ClientModule
     Import-Module -name $clientModulePath -Force
 
-    Set-MockInvokeCommand -CommandKey 'gh api user' -Command ' echo "Hello World" '
+    Set-InvokeCommand -CommandKey 'gh api user' -Command ' echo "Hello World" '
 
     $result =  Get-MockFunctionCallAsync
 

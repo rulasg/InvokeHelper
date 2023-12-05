@@ -1,11 +1,11 @@
 
-$script:MockInvokeCommands = @{}
+$script:InvokeCommandList = @{}
 
 <#
 .SYNOPSIS
 Set Command list with the key and command
 #>
-function Set-MockInvokeCommand{
+function Set-InvokeCommand{
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey,
@@ -13,28 +13,28 @@ function Set-MockInvokeCommand{
     )
     process {
         if ($PSCmdlet.ShouldProcess("CommandList", "Set $CommandKey = $Command")) {
-            $MockInvokeCommands[$CommandKey] = $Command
+            $InvokeCommandList[$CommandKey] = $Command
         }
     }
-} Export-ModuleMember -Function Set-MockInvokeCommand
+} Export-ModuleMember -Function Set-InvokeCommand
 
-function Test-MockInvokeCommand{
+function Test-InvokeCommand{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey
     )
     process {
-        return $MockInvokeCommands.ContainsKey($CommandKey)
+        return $InvokeCommandList.ContainsKey($CommandKey)
     }
 }
 
-function Get-MockInvokeCommand{
+function Get-InvokeCommand{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey
     )
     process {
-        return $MockInvokeCommands[$CommandKey]
+        return $InvokeCommandList[$CommandKey]
     }
 }
 
@@ -42,18 +42,18 @@ function Get-MockInvokeCommand{
 .SYNOPSIS
 Reset Command list
 #>
-function Reset-MockInvokeCommand{
+function Reset-InvokeCommand{
     [CmdletBinding(SupportsShouldProcess)]
     param()
     process {
         if ($PSCmdlet.ShouldProcess("CommandList", "Reset")) {
-            $MockInvokeCommands = @{}
+            $InvokeCommandList = @{}
         }
 
-        "$MockInvokeCommands" | Write-Verbose
+        "$InvokeCommandList" | Write-Verbose
 
     }
-} Export-ModuleMember -Function Reset-MockInvokeCommand
+} Export-ModuleMember -Function Reset-InvokeCommand
 
-# Initilize $MockInvokeCommands
-Reset-MockInvokeCommand
+# Initilize $InvokeCommandList
+Reset-InvokeCommand

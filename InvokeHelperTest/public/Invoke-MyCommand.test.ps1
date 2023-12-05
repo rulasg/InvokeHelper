@@ -24,7 +24,7 @@ function InvokeHelperTest_Invoke_MyCommand_WithMock {
     $comand = '@{login = "FakeName"; id="6666666"} | ConvertTo-Json'
 
     # Set the mock you want to use based on a CommandKey the function will use
-    Set-MockInvokeCommand -CommandKey 'Command to call to Mock' -Command $comand
+    Set-InvokeCommand -CommandKey 'Command to call to Mock' -Command $comand
 
     # Call the function with the CommandKey as normal
     $result = Invoke-MyCommandJson -Command 'Command to call to Mock'

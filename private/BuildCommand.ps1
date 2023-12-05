@@ -7,8 +7,8 @@ function Build-ScriptBlock{
     )
     process {
 
-        if(Test-MockInvokeCommand -Command $Command){
-            $cmd = Get-MockInvokeCommand -Command $Command
+        if(Test-InvokeCommand -Command $Command){
+            $cmd = Get-InvokeCommand -Command $Command
         } else {
             $cmd = $Command
         }

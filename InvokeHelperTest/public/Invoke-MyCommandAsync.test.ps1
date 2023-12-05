@@ -23,7 +23,7 @@ function InvokeHelperTest_MyCommandAsync_Invoke_WithMock {
     $comand = '@{login = "FakeName"; id="6666666"}'
 
     # Set the mock you want to use based on a CommandKey the function will use
-    Set-MockInvokeCommand -CommandKey 'Command to call to Mock' -Command $comand
+    Set-InvokeCommand -CommandKey 'Command to call to Mock' -Command $comand
 
     # Call the function with the CommandKey as normal
     $result = Invoke-MyCommandAsync -Command 'Command to call to Mock'
@@ -142,7 +142,7 @@ function InvokeHelperTest_MyCommandAsync_Invoke_Multiple_StingArray_WithMock{
 
         $command = $commandPattern -replace '{number}', $_
         $commandMock = $comandMockPattern -replace '{number}', $_
-        Set-MockInvokeCommand -CommandKey $command -Command $commandMock
+        Set-InvokeCommand -CommandKey $command -Command $commandMock
 
         $commands += $command
     }
