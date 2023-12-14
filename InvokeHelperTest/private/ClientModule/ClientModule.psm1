@@ -13,7 +13,7 @@ $CommandList =@{
 .SYNOPSIS
 Will invoke a command
 #>
-function Get-MockFunctionCall{
+function Get-FunctionCall{
     [CmdletBinding()]
     param()
 
@@ -23,13 +23,13 @@ function Get-MockFunctionCall{
     $result = Invoke-MyCommand -Command $command
 
     return $result
-} Export-ModuleMember -Function Get-MockFunctionCall
+} Export-ModuleMember -Function Get-FunctionCall
 
 <#
 .SYNOPSIS
 Will start a job with the given command.
 #>
-function Get-MockFunctionCallAsync{
+function Get-FunctionCallAsync{
     [CmdletBinding()]
     param()
 
@@ -39,4 +39,4 @@ function Get-MockFunctionCallAsync{
     $result = Invoke-MyCommandAsync -Command $command
 
     return $result
-} Export-ModuleMember -Function Get-MockFunctionCallAsync
+} Export-ModuleMember -Function Get-FunctionCallAsync
