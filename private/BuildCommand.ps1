@@ -6,12 +6,8 @@ function Build-ScriptBlock{
         [Parameter()][hashtable]$Parameters
     )
     process {
-
-        if(Test-InvokeCommandAlias -Alias $Command){
-            $cmd = Get-InvokeCommandAlias -Alias $Command
-        } else {
-            $cmd = $Command
-        }
+        # Check if command is an alias. If not will return the command.
+        $cmd = Resolve-InvokeCommandAlias -Alias $Command
 
         # Replace parameters on command
         if($Parameters){
@@ -25,3 +21,4 @@ function Build-ScriptBlock{
         return $ScriptBlock
     }
 }
+

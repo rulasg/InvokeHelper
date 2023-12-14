@@ -28,13 +28,21 @@ function Test-InvokeCommandAlias{
     }
 }
 
-function Get-InvokeCommandAlias{
+function Resolve-InvokeCommandAlias{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Alias
     )
     process {
-        return $InvokeCommandList[$Alias]
+        if(Test-InvokeCommandAlias -Alias $Alias){
+            $cmd = $InvokeCommandList[$Alias]
+            # Recursive just in case we have mock the command behind the alias
+            $cmd = Resolve-InvokeCommandAlias -Alias $cmd
+        } else {
+            $cmd = $Alias
+        }
+
+        return $cmd
     }
 }
 
