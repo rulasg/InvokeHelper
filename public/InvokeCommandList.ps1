@@ -5,36 +5,36 @@ $script:InvokeCommandList = @{}
 .SYNOPSIS
 Set Command list with the key and command
 #>
-function Set-InvokeCommand{
+function Set-InvokeCommandAlias{
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey,
+        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Alias,
         [Parameter(Mandatory,ValueFromPipeline,Position=1)][string]$Command
     )
     process {
-        if ($PSCmdlet.ShouldProcess("CommandList", "Set $CommandKey = $Command")) {
-            $InvokeCommandList[$CommandKey] = $Command
+        if ($PSCmdlet.ShouldProcess("CommandList", "Set $Alias = $Command")) {
+            $InvokeCommandList[$Alias] = $Command
         }
     }
-} Export-ModuleMember -Function Set-InvokeCommand
+} Export-ModuleMember -Function Set-InvokeCommandAlias
 
-function Test-InvokeCommand{
+function Test-InvokeCommandAlias{
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey
+        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Alias
     )
     process {
-        return $InvokeCommandList.ContainsKey($CommandKey)
+        return $InvokeCommandList.ContainsKey($Alias)
     }
 }
 
-function Get-InvokeCommand{
+function Get-InvokeCommandAlias{
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$CommandKey
+        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Alias
     )
     process {
-        return $InvokeCommandList[$CommandKey]
+        return $InvokeCommandList[$Alias]
     }
 }
 
@@ -42,7 +42,7 @@ function Get-InvokeCommand{
 .SYNOPSIS
 Reset Command list
 #>
-function Reset-InvokeCommand{
+function Reset-InvokeCommandAlias{
     [CmdletBinding(SupportsShouldProcess)]
     param()
     process {
@@ -53,7 +53,7 @@ function Reset-InvokeCommand{
         "$InvokeCommandList" | Write-Verbose
 
     }
-} Export-ModuleMember -Function Reset-InvokeCommand
+} Export-ModuleMember -Function Reset-InvokeCommandAlias
 
 # Initilize $InvokeCommandList
-Reset-InvokeCommand
+Reset-InvokeCommandAlias

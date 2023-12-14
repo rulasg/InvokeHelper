@@ -7,8 +7,8 @@ function Build-ScriptBlock{
     )
     process {
 
-        if(Test-InvokeCommand -Command $Command){
-            $cmd = Get-InvokeCommand -Command $Command
+        if(Test-InvokeCommandAlias -Alias $Command){
+            $cmd = Get-InvokeCommandAlias -Alias $Command
         } else {
             $cmd = $Command
         }
