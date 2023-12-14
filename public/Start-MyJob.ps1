@@ -12,11 +12,12 @@ The Job started.
 function Start-MyJob{
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command
+        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command,
+        [Parameter(Position=1)][hashtable]$Parameters
     )
     process {
 
-        $scriptBlock  = Build-ScriptBlock -Command $Command
+        $scriptBlock  = Build-ScriptBlock -Command $Command -Parameters $Parameters
 
         if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
             $job = Start-Job -ScriptBlock $scriptBlock

@@ -8,13 +8,33 @@ COPYRIGHT
     (c) rulasg. All rights reserved.
 
 SHORT DESCRIPTION
-    Helper to make calls to tooks from powershell
+    Helper to make calls to tools from powershell
 
 LONG DESCRIPTION
-    Helper to make calls to tooks from powershell
+    Helper to make calls to tools from powershell
 
 KEYWORDS
     Powershell Testing UnitTest Module TestingHelper
 
 SEE ALSO
     https://github.com/rulasg/TestingHelper/
+
+INVOCATION CMDLETS
+    Invoke-MyCommand
+    Invoke-MyCommandAsync
+    Invoke-MyCommandJson
+    Invoke-MyCommandJsonAsync
+
+SETTING THE COMMAND LIST
+    To allow the decouple of the function with the app or tool to call we can set the command list for later to be used.
+
+    ```powershell
+        > Set-InvokeCommand -Command "GetUser" -CommandPath "gh api user"
+        > $result = Invoke-MyCommandJson -Command "GetUser"
+        > Assert-AreEqual -Expected 'fakeName' -Presented $result.login
+        > Assert-AreEqual -Expected 6666666 -Presented $result.id
+    ```
+
+PARAMETERS
+    If the command have variables like `{name}` you can use the $Parameters parameter to input a HASTABLE that describes all the strings that will be replaced on the command before executing it.
+    Combining $Parameters and CommandsList you will be able to decouple the tool calls from your code for later Unit Testing or changing tool easylly.

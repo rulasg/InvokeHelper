@@ -36,7 +36,7 @@ function Get-MockFunctionCallAsync{
     # $command = $CommandList[[CmdKey]::GetUser)]
     $command = $CommandList.[CmdKey]::GetUser
 
-    $job = Start-MyJob -Command $command
+    $result = Invoke-MyCommandAsync -Command $command
 
-    return $job
+    return $result
 } Export-ModuleMember -Function Get-MockFunctionCallAsync

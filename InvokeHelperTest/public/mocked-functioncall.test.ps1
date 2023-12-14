@@ -22,11 +22,7 @@ function InvokeHelperTest_MockFunctionCallAsync{
 
     Set-MockInvokeCommand -CommandKey 'gh api user' -Command ' echo "Hello World" '
 
-    $Job = Get-MockFunctionCallAsync
-
-    $job = Wait-Job -Job $Job
-
-    $result = Receive-Job -Job $Job
+    $result =  Get-MockFunctionCallAsync
 
     Assert-AreEqual -Expected "Hello World" -Presented $result
 }
