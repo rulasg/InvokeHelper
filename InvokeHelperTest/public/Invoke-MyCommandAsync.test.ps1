@@ -33,15 +33,37 @@ function InvokeHelperTest_MyCommandAsync_Invoke_WithMock {
 }
 
 function InvokeHelperTest_MyCommandJsonAsync_Invoke{
-    [CmdletBinding()]
-    param()
 
-    $comand = '@{login = "FakeName"; id="6666666"}'
+    $comand = '@{login = "FakeName"; id="6666666"} | ConvertTo-Json'
 
-    $result = Invoke-MyCommandAsync -Command $comand
+    $result = Invoke-MyCommandJsonAsync -Command $comand
 
-    Assert-AreEqual -Expected "fakeName" -Presented $result.login
+    Assert-AreEqual -Expected "FakeName" -Presented $result.login
     Assert-AreEqual -Expected 6666666 -Presented $result.id
+}
+
+function InvokeHelperTest_MyCommandJsonAsync_Invoke_Commands_WithParameters{
+    $comands = @()
+    $comands += '@{login = "{user}"; id="{id}"; task="Task1"} | ConvertTo-Json'
+    $comands += '@{login = "{user}"; id="{id}"; task="Task2"} | ConvertTo-Json'
+    $comands += '@{login = "{user}"; id="{id}"; task="Task3"} | ConvertTo-Json'
+    $param = @{user = "FakeName"; id="6666666"}
+
+    $result = Invoke-MyCommandJsonAsync -Commands $comands -Parameters $param
+
+    $uniqueUser = $result | Select-Object -Property login -Unique
+    Assert-Count -Expected 1 -Presented $uniqueUser
+    Assert-AreEqual -Expected "FakeName" -Presented $uniqueUser.login
+
+    $uniqueId = $result | Select-Object -Property id -Unique
+    Assert-Count -Expected 1 -Presented $uniqueId
+    Assert-AreEqual -Expected 6666666 -Presented $uniqueId.id
+
+    $tasks = $result | Select-Object -ExpandProperty task -Unique
+    Assert-Count -Expected 3 -Presented $tasks
+    Assert-Contains -Expected "Task1" -Presented $tasks
+    Assert-Contains -Expected "Task2" -Presented $tasks
+    Assert-Contains -Expected "Task3" -Presented $tasks
 }
 
 #### several calls

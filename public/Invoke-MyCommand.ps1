@@ -16,12 +16,13 @@ Invoke-MyCommand -Command 'gh api user'
 function Invoke-MyCommand {
     [CmdletBinding(SupportsShouldProcess)]
     param(
-        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command
+        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command,
+        [Parameter(Position=1)][hashtable]$Parameters
     )
 
     process{
 
-        $scriptBlock = Build-ScriptBlock -Command $Command
+        $scriptBlock = Build-ScriptBlock -Command $Command -Parameters $Parameters
 
         if ($PSCmdlet.ShouldProcess("Target", $command)) {
 
@@ -38,29 +39,21 @@ function Invoke-MyCommand {
 
 <#
 .SYNOPSIS
-Execute the command
-
-.DESCRIPTION
-The command will generate a Json that the fun will serialize to a PSObject
-
-.PARAMETER Command
-Expression to be executed. This expresion will generate a Json
-
-.OUTPUTS
-Return of the expression
+    Execute a set of commands and return the results as a PSCustomObject serialized from Json command output
 
 .EXAMPLE
-Invoke-MyCommandJson -Command 'gh api user'
+    Invoke-MyCommandJson -Command 'gh api user'
 #>
 function Invoke-MyCommandJson {
     [CmdletBinding(SupportsShouldProcess)]
     [Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSShouldProcess', '', Scope='Function')]
     # False positive. We need -WhatIf to call later Invoke-MyCommand with this preferences
     param(
-        [Parameter(Position=0)][string]$Command
+        [Parameter(Mandatory,Position=0)][string]$Command,
+        [Parameter(Position=1)][hashtable]$Parameters
     )
 
-   $resultJson = Invoke-MyCommand -Command $Command
+   $resultJson = Invoke-MyCommand -Command $Command -Parameters $Parameters
 
    $result = $resultJson | ConvertFrom-Json
 
