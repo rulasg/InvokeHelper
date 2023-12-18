@@ -29,10 +29,18 @@ SETTING THE COMMAND LIST
     To allow the decouple of the function with the app or tool to call we can set the command list for later to be used.
 
     ```powershell
-        > Set-InvokeCommandAlias -Alias "GetUser" -CommandPath "gh api user"
+        > Set-InvokeCommandAlias -Alias "GetUser" -Command "gh api user"
         > $result = Invoke-MyCommandJson -Command "GetUser"
-        > Assert-AreEqual -Expected 'fakeName' -Presented $result.login
+        > Assert-AreEqual -Expected 'myHandle' -Presented $result.login
         > Assert-AreEqual -Expected 6666666 -Presented $result.id
+    ```
+
+    ```powershell
+        > Get-InvokeCommandAlias                                           
+
+        Name                           Value
+        ----                           -----
+        GetUser                        gh api user
     ```
 
 PARAMETERS
