@@ -18,6 +18,18 @@ function Set-InvokeCommandAlias{
     }
 } Export-ModuleMember -Function Set-InvokeCommandAlias
 
+function Get-InvokeCommandAlias{
+    [CmdletBinding(SupportsShouldProcess)]
+    param()
+
+    if($script:InvokeCommandList -eq $null -or $script:InvokeCommandList.Count -eq 0){
+        return $null
+    } else {
+        return $script:InvokeCommandList
+    }
+
+} Export-ModuleMember -Function Get-InvokeCommandAlias
+
 function Test-InvokeCommandAlias{
     [CmdletBinding()]
     param(
@@ -55,10 +67,10 @@ function Reset-InvokeCommandAlias{
     param()
     process {
         if ($PSCmdlet.ShouldProcess("CommandList", "Reset")) {
-            $InvokeCommandList = @{}
+            $script:InvokeCommandList = @{}
         }
 
-        "$InvokeCommandList" | Write-Verbose
+        "$script:InvokeCommandList" | Write-Verbose
 
     }
 } Export-ModuleMember -Function Reset-InvokeCommandAlias
