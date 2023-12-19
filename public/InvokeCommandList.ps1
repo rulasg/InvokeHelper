@@ -18,8 +18,13 @@ function Set-InvokeCommandAlias{
     }
 } Export-ModuleMember -Function Set-InvokeCommandAlias
 
+<#
+.SYNOPSIS
+Get the Command list active in the module
+#>
 function Get-InvokeCommandAlias{
-    [CmdletBinding(SupportsShouldProcess)]
+    [CmdletBinding()]
+    [OutputType([hashtable])]
     param()
 
     if($script:InvokeCommandList -eq $null -or $script:InvokeCommandList.Count -eq 0){
