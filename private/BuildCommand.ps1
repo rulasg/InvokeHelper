@@ -16,6 +16,9 @@ function Build-ScriptBlock{
             }
         }
 
+        # Resolve again checking for full command mocks
+        $cmd = Resolve-InvokeCommandAlias -Alias $cmd
+
         $ScriptBlock = [ScriptBlock]::Create($cmd)
 
         return $ScriptBlock
