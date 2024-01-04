@@ -1,6 +1,6 @@
-function Build-ScriptBlock{
+function Build-Command{
     [CmdletBinding()]
-    [OutputType([ScriptBlock])]
+    [OutputType([string])]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command,
         [Parameter()][hashtable]$Parameters
@@ -19,9 +19,17 @@ function Build-ScriptBlock{
         # Resolve again checking for full command mocks
         $cmd = Resolve-InvokeCommandAlias -Alias $cmd
 
-        $ScriptBlock = [ScriptBlock]::Create($cmd)
-
-        return $ScriptBlock
+        return $cmd
     }
 }
 
+function New-ScriptBlock{
+    [CmdletBinding()]
+    [OutputType([ScriptBlock])]
+    param(
+        [Parameter(Mandatory,Position=0)][string]$Command
+    )
+    $ScriptBlock = [ScriptBlock]::Create($Command)
+
+    return $ScriptBlock
+}
