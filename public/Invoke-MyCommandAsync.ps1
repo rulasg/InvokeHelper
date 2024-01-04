@@ -29,7 +29,9 @@ function Invoke-MyCommandAsync {
 
         $cmds | ForEach-Object {
 
-            $scriptBlock  = Build-ScriptBlock -Command $_ -Parameters $Parameters
+            $cmd = Build-Command -Command $_ -Parameters $Parameters
+
+            $scriptBlock = New-ScriptBlock -Command $cmd
 
             if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
                 $job = Start-Job -ScriptBlock $scriptBlock

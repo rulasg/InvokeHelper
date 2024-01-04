@@ -22,7 +22,9 @@ function Invoke-MyCommand {
 
     process{
 
-        $scriptBlock = Build-ScriptBlock -Command $Command -Parameters $Parameters
+        $cmd = Build-Command -Command $Command -Parameters $Parameters
+
+        $scriptBlock = New-ScriptBlock -Command $cmd
 
         if ($PSCmdlet.ShouldProcess("Target", $command)) {
 
