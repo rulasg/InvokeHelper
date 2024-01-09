@@ -9,11 +9,16 @@ function Set-InvokeCommandAlias{
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Alias,
-        [Parameter(Mandatory,ValueFromPipeline,Position=1)][string]$Command
+        [Parameter(Mandatory,ValueFromPipeline,Position=1)][string]$Command,
+        [Parameter(Position=2)][string]$Tag
     )
     process {
         if ($PSCmdlet.ShouldProcess("CommandList", "Set $Alias = $Command")) {
-            $InvokeCommandList[$Alias] = $Command
+            $InvokeCommandList[$Alias] = [PSCustomObject]@{
+                Alias = $Alias
+                Command = $Command
+                Tag = $Tag
+            }
         }
     }
 } Export-ModuleMember -Function Set-InvokeCommandAlias
@@ -52,7 +57,7 @@ function Resolve-InvokeCommandAlias{
     )
     process {
         if(Test-InvokeCommandAlias -Alias $Alias){
-            $cmd = $InvokeCommandList[$Alias]
+            $cmd = $InvokeCommandList[$Alias].Command
         } else {
             $cmd = $Alias
         }
