@@ -18,6 +18,7 @@ function Set-InvokeCommandAlias{
                 Alias = $Alias
                 Command = $Command
                 Tag = $Tag
+                Enabled = $true
             }
         }
     }
@@ -96,3 +97,29 @@ function Reset-InvokeCommandAlias{
 
 # Initilize $InvokeCommandList
 Reset-InvokeCommandAlias
+
+function Disable-InvokeCommandAlias{
+    [CmdletBinding()]
+    param(
+        [Parameter()][string]$Tag
+    )
+
+    Foreach ($key in $InvokeCommandList.Keys) {
+        if($InvokeCommandList[$key].Tag -eq $Tag){
+            $InvokeCommandList[$key].Enabled = $false
+        }
+    }
+} Export-ModuleMember -Function Disable-InvokeCommandAlias
+
+function Enable-InvokeCommandAlias{
+    [CmdletBinding()]
+    param(
+        [Parameter()][string]$Tag
+    )
+
+    Foreach ($key in $InvokeCommandList.Keys) {
+        if($InvokeCommandList[$key].Tag -eq $Tag){
+            $InvokeCommandList[$key].Enabled = $true
+        }
+    }
+} Export-ModuleMember -Function Enable-InvokeCommandAlias
