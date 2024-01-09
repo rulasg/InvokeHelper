@@ -10,11 +10,7 @@ function Build-Command{
         $cmd1 = Resolve-InvokeCommandAlias -Alias $Command
 
         # Replace parameters on command
-        if($Parameters){
-            foreach($key in $Parameters.Keys){
-                $cmd1 = $cmd1.Replace("{"+$key+"}",$Parameters[$key])
-            }
-        }
+        $cmd1 = Update-CommandWithParameter -Command $cmd1 -Parameters $Parameters
 
         # Resolve again checking for full command mocks
         $cmd2 = Resolve-InvokeCommandAlias -Alias $cmd1
@@ -33,6 +29,26 @@ function Build-Command{
         return $cmd2
     }
 }
+
+function Update-CommandWithParameter{
+    [CmdletBinding()]
+    [OutputType([string])]
+    param(
+        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Command,
+        [Parameter()][hashtable]$Parameters
+    )
+    process {
+        # Replace parameters on command
+        if($Parameters){
+            foreach($key in $Parameters.Keys){
+                $Command = $Command.Replace("{"+$key+"}",$Parameters[$key])
+            }
+        }
+
+        return $Command
+    }
+}
+
 
 function New-ScriptBlock{
     [CmdletBinding()]
