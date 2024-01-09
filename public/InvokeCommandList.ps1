@@ -28,7 +28,7 @@ function Set-InvokeCommandAlias{
 .SYNOPSIS
 Get the Command list active in the module
 #>
-function Get-InvokeCommandAlias{
+function Get-InvokeCommandAliasList{
     [CmdletBinding()]
     [OutputType([hashtable])]
     param()
@@ -39,7 +39,7 @@ function Get-InvokeCommandAlias{
         return $script:InvokeCommandList
     }
 
-} Export-ModuleMember -Function Get-InvokeCommandAlias
+} Export-ModuleMember -Function Get-InvokeCommandAliasList
 
 function Test-InvokeCommandAlias{
     [CmdletBinding()]
@@ -51,20 +51,13 @@ function Test-InvokeCommandAlias{
     }
 }
 
-function Resolve-InvokeCommandAlias{
+function Find-InvokeCommandAlias{
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Alias
+        [Parameter(Mandatory,Position=0)][string]$Alias
     )
-    process {
-        if(Test-InvokeCommandAlias -Alias $Alias){
-            $cmd = $InvokeCommandList[$Alias].Command
-        } else {
-            $cmd = $Alias
-        }
 
-        return $cmd
-    }
+    return $InvokeCommandList[$Alias]
 }
 
 <#
