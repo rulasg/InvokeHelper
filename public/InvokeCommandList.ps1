@@ -53,8 +53,6 @@ function Resolve-InvokeCommandAlias{
     process {
         if(Test-InvokeCommandAlias -Alias $Alias){
             $cmd = $InvokeCommandList[$Alias]
-            # Recursive just in case we have mock the command behind the alias
-            $cmd = Resolve-InvokeCommandAlias -Alias $cmd
         } else {
             $cmd = $Alias
         }
