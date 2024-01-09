@@ -72,10 +72,21 @@ Reset Command list
 #>
 function Reset-InvokeCommandAlias{
     [CmdletBinding(SupportsShouldProcess)]
-    param()
+    param(
+        [Parameter()][string]$Tag
+    )
+    
     process {
+
+        $newInvokeCommandList = @{}
+
+        if(-Not [string]::IsNullOrWhiteSpace($Tag)){
+            $validKeys = $script:InvokeCommandList.Keys | Where-Object { $script:InvokeCommandList.$_.Tag -ne $Tag }
+            $validKeys | ForEach-Object { $newInvokeCommandList[$_] = $script:InvokeCommandList[$_] }
+        }
+
         if ($PSCmdlet.ShouldProcess("CommandList", "Reset")) {
-            $script:InvokeCommandList = @{}
+            $script:InvokeCommandList = $newInvokeCommandList
         }
 
         "$script:InvokeCommandList" | Write-Verbose
