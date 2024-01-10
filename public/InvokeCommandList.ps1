@@ -9,11 +9,17 @@ function Set-InvokeCommandAlias{
     [CmdletBinding(SupportsShouldProcess)]
     param(
         [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Alias,
-        [Parameter(Mandatory,ValueFromPipeline,Position=1)][string]$Command
+        [Parameter(Mandatory,ValueFromPipeline,Position=1)][string]$Command,
+        [Parameter(Position=2)][string]$Tag
     )
     process {
         if ($PSCmdlet.ShouldProcess("CommandList", "Set $Alias = $Command")) {
-            $InvokeCommandList[$Alias] = $Command
+            $InvokeCommandList[$Alias] = [PSCustomObject]@{
+                Alias = $Alias
+                Command = $Command
+                Tag = $Tag
+                Enabled = $true
+            }
         }
     }
 } Export-ModuleMember -Function Set-InvokeCommandAlias
@@ -22,7 +28,7 @@ function Set-InvokeCommandAlias{
 .SYNOPSIS
 Get the Command list active in the module
 #>
-function Get-InvokeCommandAlias{
+function Get-InvokeCommandAliasList{
     [CmdletBinding()]
     [OutputType([hashtable])]
     param()
@@ -33,7 +39,7 @@ function Get-InvokeCommandAlias{
         return $script:InvokeCommandList
     }
 
-} Export-ModuleMember -Function Get-InvokeCommandAlias
+} Export-ModuleMember -Function Get-InvokeCommandAliasList
 
 function Test-InvokeCommandAlias{
     [CmdletBinding()]
@@ -45,22 +51,13 @@ function Test-InvokeCommandAlias{
     }
 }
 
-function Resolve-InvokeCommandAlias{
+function Get-InvokeCommandAlias{
     [CmdletBinding()]
     param(
-        [Parameter(Mandatory,ValueFromPipeline,Position=0)][string]$Alias
+        [Parameter(Mandatory,Position=0)][string]$Alias
     )
-    process {
-        if(Test-InvokeCommandAlias -Alias $Alias){
-            $cmd = $InvokeCommandList[$Alias]
-            # Recursive just in case we have mock the command behind the alias
-            $cmd = Resolve-InvokeCommandAlias -Alias $cmd
-        } else {
-            $cmd = $Alias
-        }
 
-        return $cmd
-    }
+    return $InvokeCommandList[$Alias]
 }
 
 <#
@@ -69,10 +66,21 @@ Reset Command list
 #>
 function Reset-InvokeCommandAlias{
     [CmdletBinding(SupportsShouldProcess)]
-    param()
+    param(
+        [Parameter()][string]$Tag
+    )
+
     process {
+
+        $newInvokeCommandList = @{}
+
+        if(-Not [string]::IsNullOrWhiteSpace($Tag)){
+            $validKeys = $script:InvokeCommandList.Keys | Where-Object { $script:InvokeCommandList.$_.Tag -ne $Tag }
+            $validKeys | ForEach-Object { $newInvokeCommandList[$_] = $script:InvokeCommandList[$_] }
+        }
+
         if ($PSCmdlet.ShouldProcess("CommandList", "Reset")) {
-            $script:InvokeCommandList = @{}
+            $script:InvokeCommandList = $newInvokeCommandList
         }
 
         "$script:InvokeCommandList" | Write-Verbose
@@ -82,3 +90,37 @@ function Reset-InvokeCommandAlias{
 
 # Initilize $InvokeCommandList
 Reset-InvokeCommandAlias
+
+<#
+.SYNOPSIS
+Disable a set of command alias by tag
+#>
+function Disable-InvokeCommandAlias{
+    [CmdletBinding()]
+    param(
+        [Parameter()][string]$Tag
+    )
+
+    Foreach ($key in $InvokeCommandList.Keys) {
+        if($InvokeCommandList[$key].Tag -eq $Tag){
+            $InvokeCommandList[$key].Enabled = $false
+        }
+    }
+} Export-ModuleMember -Function Disable-InvokeCommandAlias
+
+<#
+.SYNOPSIS
+Enable a set of command alias by tag
+#>
+function Enable-InvokeCommandAlias{
+    [CmdletBinding()]
+    param(
+        [Parameter()][string]$Tag
+    )
+
+    Foreach ($key in $InvokeCommandList.Keys) {
+        if($InvokeCommandList[$key].Tag -eq $Tag){
+            $InvokeCommandList[$key].Enabled = $true
+        }
+    }
+} Export-ModuleMember -Function Enable-InvokeCommandAlias

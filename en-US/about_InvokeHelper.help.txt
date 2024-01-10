@@ -36,7 +36,7 @@ SETTING THE COMMAND LIST
     ```
 
     ```powershell
-        > Get-InvokeCommandAlias                                           
+        > Get-InvokeCommandAliasList                                           
 
         Name                           Value
         ----                           -----
