@@ -30,7 +30,7 @@ CompanyName = 'Unknown'
 Copyright = '(c) rulasg. All rights reserved.'
 
 # Description of the functionality provided by this module
-Description = 'Helper to make calls to tooks from powershell'
+Description = 'Helper to make dependencies calls from powershell. Decouple the calls to tools and functions. Makes calls Async and Paralell. Mock dependencies calls for testing.'
 
 # Minimum version of the PowerShell engine required by this module
 # PowerShellVersion = ''

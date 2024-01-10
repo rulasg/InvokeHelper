@@ -8,10 +8,10 @@ COPYRIGHT
     (c) rulasg. All rights reserved.
 
 SHORT DESCRIPTION
-    Helper to make calls to tools from powershell
+    Helper to make dependencies calls from powershell.
 
 LONG DESCRIPTION
-    Helper to make calls to tools from powershell
+    Helper to make dependencies calls from powershell. Decouple the calls to tools and functions. Makes calls Async and Paralell. Mock dependencies calls for testing.
 
 KEYWORDS
     Powershell Testing UnitTest Module TestingHelper
