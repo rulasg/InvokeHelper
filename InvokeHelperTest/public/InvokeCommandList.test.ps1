@@ -10,12 +10,12 @@ function InvokeHelperTest_InvokeCommandAlias_Get{
 }
 
 function InvokeHelperTest_InvokeCommandAlias_Reset{
-    
+
     Reset-InvokeCommandAlias
 
     $result = Get-InvokeCommandAliasList
     Assert-IsNull -Object $result
-    
+
     Set-InvokeCommandAlias -Alias "commandAlias" -Command 'echo "this is a sample command"'
     Set-InvokeCommandAlias -Alias "commandAlias2" -Command 'echo "this is a sample command2"'
 
@@ -38,7 +38,7 @@ function InvokeHelperTest_InvokeCommandAlias_Reset_WithTag{
     Set-InvokeCommandAlias -Alias "commandAlias21" -Command 'echo "this is a sample command21"' -Tag Mock2
     Set-InvokeCommandAlias -Alias "commandAlias12" -Command 'echo "this is a sample command12"' -Tag Mock1
     Set-InvokeCommandAlias -Alias "commandAlias22" -Command 'echo "this is a sample command22"' -Tag Mock2
-    
+
     $result = Get-InvokeCommandAliasList
 
     Assert-Count -Expected 4 -Presented $result
@@ -78,7 +78,7 @@ function InvokeHelperTest_InvokeCommandAlias_Enable_Disable{
 
     Assert-IsTrue -Condition $result.commandAlias1.Enabled
     Assert-IsTrue -Condition $result.commandAlias3.Enabled
-    
+
     Assert-IsTrue -Condition $result.commandAlias2.Enabled
     Assert-IsTrue -Condition $result.commandAlias4.Enabled
 }

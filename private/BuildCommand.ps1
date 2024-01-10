@@ -13,13 +13,13 @@ function Build-Command{
         }
 
         # Find the command for this alias
-        $alias = Find-InvokeCommandAlias -Alias $Command
+        $alias = Get-InvokeCommandAlias -Alias $Command
 
         # Build the command with parameter
         $cmd = Update-CommandWithParameter -Command $alias.Command -Parameters $Parameters
 
         # Recurse to check for mocks
-        $mock = Find-InvokeCommandAlias -Alias $cmd
+        $mock = Get-InvokeCommandAlias -Alias $cmd
         if($mock){
             # We have a mock command
             $cmd = $mock.Command

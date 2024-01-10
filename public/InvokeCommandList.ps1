@@ -51,7 +51,7 @@ function Test-InvokeCommandAlias{
     }
 }
 
-function Find-InvokeCommandAlias{
+function Get-InvokeCommandAlias{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory,Position=0)][string]$Alias
@@ -69,7 +69,7 @@ function Reset-InvokeCommandAlias{
     param(
         [Parameter()][string]$Tag
     )
-    
+
     process {
 
         $newInvokeCommandList = @{}
@@ -91,6 +91,10 @@ function Reset-InvokeCommandAlias{
 # Initilize $InvokeCommandList
 Reset-InvokeCommandAlias
 
+<#
+.SYNOPSIS
+Disable a set of command alias by tag
+#>
 function Disable-InvokeCommandAlias{
     [CmdletBinding()]
     param(
@@ -104,6 +108,10 @@ function Disable-InvokeCommandAlias{
     }
 } Export-ModuleMember -Function Disable-InvokeCommandAlias
 
+<#
+.SYNOPSIS
+Enable a set of command alias by tag
+#>
 function Enable-InvokeCommandAlias{
     [CmdletBinding()]
     param(
