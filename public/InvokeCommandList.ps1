@@ -101,11 +101,8 @@ function Disable-InvokeCommandAlias{
         [Parameter()][string]$Tag
     )
 
-    Foreach ($key in $InvokeCommandList.Keys) {
-        if($InvokeCommandList[$key].Tag -eq $Tag){
-            $InvokeCommandList[$key].Enabled = $false
-        }
-    }
+    Set-IncokeCommandAlias -Tag $Tag -Value $false
+
 } Export-ModuleMember -Function Disable-InvokeCommandAlias
 
 <#
@@ -118,9 +115,26 @@ function Enable-InvokeCommandAlias{
         [Parameter()][string]$Tag
     )
 
+    Set-IncokeCommandAlias -Tag $Tag -Value $true
+
+} Export-ModuleMember -Function Enable-InvokeCommandAlias
+
+function Set-IncokeCommandAlias{
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)][string]$Tag,
+        [Parameter(Mandatory)][bool]$Value
+    )
+
     Foreach ($key in $InvokeCommandList.Keys) {
-        if($InvokeCommandList[$key].Tag -eq $Tag){
-            $InvokeCommandList[$key].Enabled = $true
+        $tag = $Tag.ToLower()
+        $aliasTag = $InvokeCommandList[$key].Tag.ToLower()
+
+        $sameTag = $tag -eq $aliasTag
+        $alltags = $tag.ToLower() -eq "all" -or $tag -eq "*"
+
+        if($sameTag -or $alltags){
+            $InvokeCommandList[$key].Enabled = $Value
         }
     }
-} Export-ModuleMember -Function Enable-InvokeCommandAlias
+}
