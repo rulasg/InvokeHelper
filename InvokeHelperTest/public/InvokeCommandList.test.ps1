@@ -83,6 +83,56 @@ function InvokeHelperTest_InvokeCommandAlias_Enable_Disable{
     Assert-IsTrue -Condition $result.commandAlias4.Enabled
 }
 
+function InvokeHelperTest_InvokeCommandAlias_Enable_Disable_All_Case{
+
+    Set-InvokeCommandAlias -Alias "commandAlias1" -Command "echo $text1" -Tag Mock1
+    Set-InvokeCommandAlias -Alias "commandAlias2" -Command "echo $text2" -Tag Mock2
+    Set-InvokeCommandAlias -Alias "commandAlias3" -Command "echo $text3" -Tag Mock1
+    Set-InvokeCommandAlias -Alias "commandAlias4" -Command "echo $text4" -Tag Mock2
+
+    Disable-InvokeCommandAlias -Tag moCK1
+
+    $result = Get-InvokeCommandAliasList
+
+    Assert-IsFalse -Condition $result.commandAlias1.Enabled
+    Assert-IsFalse -Condition $result.commandAlias3.Enabled
+
+    Assert-IsTrue -Condition $result.commandAlias2.Enabled
+    Assert-IsTrue -Condition $result.commandAlias4.Enabled
+
+    Enable-InvokeCommandAlias -Tag ALL
+
+    Assert-IsTrue -Condition $result.commandAlias1.Enabled
+    Assert-IsTrue -Condition $result.commandAlias3.Enabled
+
+    Assert-IsTrue -Condition $result.commandAlias2.Enabled
+    Assert-IsTrue -Condition $result.commandAlias4.Enabled
+
+    Disable-InvokeCommandAlias -Tag *
+
+    Assert-IsFalse -Condition $result.commandAlias1.Enabled
+    Assert-IsFalse -Condition $result.commandAlias3.Enabled
+
+    Assert-IsFalse -Condition $result.commandAlias2.Enabled
+    Assert-IsFalse -Condition $result.commandAlias4.Enabled
+
+    Enable-InvokeCommandAlias -Tag *
+
+    Assert-IsTrue -Condition $result.commandAlias1.Enabled
+    Assert-IsTrue -Condition $result.commandAlias3.Enabled
+
+    Assert-IsTrue -Condition $result.commandAlias2.Enabled
+    Assert-IsTrue -Condition $result.commandAlias4.Enabled
+
+    Disable-InvokeCommandAlias -Tag aLl
+
+    Assert-IsFalse -Condition $result.commandAlias1.Enabled
+    Assert-IsFalse -Condition $result.commandAlias3.Enabled
+
+    Assert-IsFalse -Condition $result.commandAlias2.Enabled
+    Assert-IsFalse -Condition $result.commandAlias4.Enabled
+}
+
 function InvokeHelperTest_InvokeCommandAlias_Invoke_Enable_Disable{
 
     $text1 = "this is a sample command 1"
