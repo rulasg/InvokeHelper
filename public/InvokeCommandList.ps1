@@ -101,7 +101,7 @@ function Disable-InvokeCommandAlias{
         [Parameter()][string]$Tag
     )
 
-    Set-IncokeCommandAlias -Tag $Tag -Value $false
+    Set-InvokeCommandTagEnabled -Tag $Tag -Value $false
 
 } Export-ModuleMember -Function Disable-InvokeCommandAlias
 
@@ -115,11 +115,11 @@ function Enable-InvokeCommandAlias{
         [Parameter()][string]$Tag
     )
 
-    Set-IncokeCommandAlias -Tag $Tag -Value $true
+    Set-InvokeCommandTagEnabled -Tag $Tag -Value $true
 
 } Export-ModuleMember -Function Enable-InvokeCommandAlias
 
-function Set-IncokeCommandAlias{
+function Set-InvokeCommandTagEnabled{
     [CmdletBinding()]
     param(
         [Parameter(Mandatory)][string]$Tag,
