@@ -69,7 +69,7 @@ function Import-TestingHelper{
     }
 }
 
-Import-TestingHelper -AllowPrerelease
+Import-TestingHelper -AllowPrerelease -Version "3.0.9-preview"
 
 # Run test by PSD1 file
 # Test-ModulelocalPSD1 -ShowTestErrors:$ShowTestErrors
