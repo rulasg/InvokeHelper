@@ -15,7 +15,27 @@ function InvokeHelperTest_JobInternal_Start{
 
 function InvokeHelperTest_JobInternal_Start_WhatIf{
     $jobs = @()
-    $jobs += Start-MyJob -Command "command to be called1" -WhatIf @InfoParameters
+    $jobs += Start-MyJob -Command 'echo "Hello World"' -WhatIf @InfoParameters
+    Assert-Contains -Expected "command to be called1" -Presented $infoVar
+
+    $jobs += Start-MyJob -Command "command to be called2" -WhatIf @InfoParameters
+    Assert-Contains -Expected "command to be called2" -Presented $infoVar
+
+    $waited = Wait-Job -Job $jobs
+
+    $result = Receive-Job -Job $waited
+
+    Assert-Count -Expected 2 -Presented $result
+    Assert-IsNull -Object $result[0]
+    Assert-IsNull -Object $result[1]
+}
+
+function InvokeHelperTest_ThreadJobInternal_Start_WhatIf{
+    $jobs = @()
+
+    $kk = Start-MyJob -Command 'echo "Hello World"' -WhatIf @InfoParameters
+
+    $jobs += Start-MyJob -Command 'echo "Hello World"' -WhatIf @InfoParameters
     Assert-Contains -Expected "command to be called1" -Presented $infoVar
 
     $jobs += Start-MyJob -Command "command to be called2" -WhatIf @InfoParameters

@@ -23,12 +23,14 @@ function Start-MyJob{
 
         if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
             $job = Start-Job -ScriptBlock $scriptBlock
+            $tj = Start-ThreadJob -ScriptBlock $scriptBlock
         } else {
             Write-Information $scriptBlock
             $job = Start-Job -ScriptBlock {$null}
+            $tj = Start-ThreadJob -ScriptBlock {$null}
         }
 
-        return $job
+        return ($job,$tj)
     }
 } Export-ModuleMember -Function Start-MyJob
 
