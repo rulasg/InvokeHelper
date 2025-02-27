@@ -9,6 +9,25 @@ function InvokeHelperTest_InvokeCommandAlias_Get{
     Assert-AreEqual -Expected 'echo "this is a sample command2"' -Presented $result["commandAlias2"].Command
 }
 
+function InvokeHelperTest_InvokeCommandAlias_Get_With_Tag{
+
+    Set-InvokeCommandAlias -Alias "commandAlias" -Command 'echo "this is a sample command"' -Tag Module1
+    Set-InvokeCommandAlias -Alias "commandAlias2" -Command 'echo "this is a sample command2"' -Tag Module2
+
+    $result = Get-InvokeCommandAliasList -Tag Module1
+
+    Assert-AreEqual -Expected 'echo "this is a sample command"' -Presented $result["commandAlias"].Command
+
+    Set-InvokeCommandAlias -Alias "commandAlias3" -Command 'echo "this is a sample command3"' -Tag Module1
+
+    $result = Get-InvokeCommandAliasList -Tag Module1
+
+    Assert-Count -Expected 2 -Presented $result
+    Assert-AreEqual -Expected 'echo "this is a sample command"' -Presented $result["commandAlias"].Command
+    Assert-AreEqual -Expected 'echo "this is a sample command3"' -Presented $result["commandAlias3"].Command
+
+}
+
 function InvokeHelperTest_InvokeCommandAlias_Reset{
 
     Reset-InvokeCommandAlias

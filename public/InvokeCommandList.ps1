@@ -31,13 +31,24 @@ Get the Command list active in the module
 function Get-InvokeCommandAliasList{
     [CmdletBinding()]
     [OutputType([hashtable])]
-    param()
+    param(
+        [Parameter()][string]$Tag
+    )
 
     if($script:InvokeCommandList -eq $null -or $script:InvokeCommandList.Count -eq 0){
         return $null
-    } else {
-        return $script:InvokeCommandList
     }
+
+    $ret = @{}
+
+    if(-Not [string]::IsNullOrWhiteSpace($Tag)){
+        $validKeys = $script:InvokeCommandList.Keys | Where-Object { $script:InvokeCommandList.$_.Tag -eq $Tag }
+        $validKeys | ForEach-Object { $ret.$_ = $script:InvokeCommandList.$_ }
+    } else {
+        $ret = $script:InvokeCommandList
+    }
+
+    return $ret
 
 } Export-ModuleMember -Function Get-InvokeCommandAliasList
 
