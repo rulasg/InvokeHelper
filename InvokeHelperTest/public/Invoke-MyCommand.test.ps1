@@ -77,3 +77,36 @@ function InvokeHelperTest_Invoke_MyCommand_WithParameters_WithMock {
     Assert-AreEqual -Expected 6666666 -Presented $result.id
 
 }
+
+function InvokeHelperTest_Invoke_MyCommand_WithDoubleQuotes {
+    [CmdletBinding()]
+    param()
+
+    $str = 'Hello "world"'
+    $command = 'echo "{string}"'
+
+    ## Wrong call with no parameter formatting
+
+    # Arrange
+    $param = @{
+        string= $str
+    }
+    # Act
+    $result = Invoke-MyCommand -Command $command -Parameters $param
+    
+    # Assert
+    Assert-AreNotEqual -Expected $str -Presented $result
+
+    # Correct call with parameter formatting
+    
+    # Arrange
+    $param = @{
+        string= $str | ConvertTo-InvokeParameterString
+    }
+
+    # Act
+    $result = Invoke-MyCommand -Command $command -Parameters $param
+
+    # Assert
+    Assert-AreEqual -Expected $str -Presented $result
+}
