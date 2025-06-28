@@ -73,9 +73,18 @@ if ( [string]::IsNullOrWhiteSpace($NuGetApiKey) ) {
         # Write-Error -Message '$Env:NUGETAPIKEY is not set. Try running `$Env:NUGETAPIKEY = (Find-DocsFile nugetapikey | rsk | Get-SecretData).Get()`'
         Write-Error -Message '$Env:NUGETAPIKEY is not set. Please set the variable with a PSGallery PAT or use -NuGetApiKey parameter.'
         exit 1
+    } else {
+        Write-Host -ForegroundColor Yellow "Using NuGetApiKey from environment variable `$Env:NUGETAPIKEY"
+        Write-Host $env:NUGETAPIKEY.substring(0, 4) + "****" # Mask the key for security
+        $NuGetApiKey = $env:NUGETAPIKEY
+        Write-Host $NuGetApiKey.substring(0, 4) + "****" # Mask the key for security
+
     }
     $NuGetApiKey = $env:NUGETAPIKEY
 }
+
+#avoid running the release
+return
 
 # Deploy module to PSGallery
 Invoke-DeployModuleToPSGallery -NuGetApiKey $NuGetApiKey -Force -ModuleManifestPath $MODULE_PSD1

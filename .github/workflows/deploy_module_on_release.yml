@@ -39,10 +39,8 @@ jobs:
             write-host "workflow_dispatch triggered on ref leaf [$tag]"
           }
 
-          If([string]::IsNullorwhitespace($tag)) {
-            # Tag name is empty, exit
-            write-error "Tag name is empty"
-            exit 1
-          }
+          Write-Host "NUGETAPIKEY : " + $env:NUGETAPIKEY.substring(0, 6) + '****'
+          $NuGetApiKey = $env:NUGETAPIKEY
+          Write-Host "NUGETAPIKEY : " + $NuGetApiKey.substring(0, 6) + '****'
 
           ./deploy.ps1 -VersionTag $tag -NugetApiKey $env:NUGETAPIKEY
