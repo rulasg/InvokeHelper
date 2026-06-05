@@ -34,10 +34,10 @@ function Invoke-MyCommandAsync {
             $scriptBlock = New-ScriptBlock -Command $cmd
 
             if ($PSCmdlet.ShouldProcess("Target", "Operation")) {
-                $job = Start-Job -ScriptBlock $scriptBlock
+                $job = Start-ThreadJob -ScriptBlock $scriptBlock
             } else {
                 Write-Information $scriptBlock
-                $job = Start-Job -ScriptBlock {$null}
+                $job = Start-ThreadJob -ScriptBlock {$null}
             }
 
             $jobs += $job
