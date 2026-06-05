@@ -15,19 +15,17 @@ function InvokeHelperTest_JobInternal_Start{
 
 function InvokeHelperTest_JobInternal_Start_WhatIf{
     $jobs = @()
-    $jobs += Start-MyJob -Command "command to be called1" -WhatIf @InfoParameters
-    Assert-Contains -Expected "command to be called1" -Presented $infoVar
+    $jobs += Start-MyJob -Command "return 1" -WhatIf @InfoParameters
+    Assert-Contains -Expected "return 1" -Presented $infoVar
 
-    $jobs += Start-MyJob -Command "command to be called2" -WhatIf @InfoParameters
-    Assert-Contains -Expected "command to be called2" -Presented $infoVar
+    $jobs += Start-MyJob -Command "return 2" -WhatIf @InfoParameters
+    Assert-Contains -Expected "return 2" -Presented $infoVar
 
     $waited = Wait-Job -Job $jobs
 
     $result = Receive-Job -Job $waited
 
-    Assert-Count -Expected 2 -Presented $result
-    Assert-IsNull -Object $result[0]
-    Assert-IsNull -Object $result[1]
+    Assert-isnull -Object $result
 }
 
 function InvokeHelperTest_JobInternal_Start_MultiCall{
