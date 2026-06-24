@@ -72,9 +72,7 @@ function Import-TestingHelper{
 
         $found = Find-Module @findParams
         if ($found) {
-            $installed = Install-Module -Name $found.Name -Force -AllowPrerelease:$AllowPrerelease -PassThru -RequiredVersion:$found.Version -ErrorAction SilentlyContinue
-        } else {
-            $installed = Install-Module -Name TestingHelper -Force -AllowPrerelease:$AllowPrerelease -PassThru -RequiredVersion:$Version -ErrorAction SilentlyContinue
+            $installed = Install-Module -Name $found.Name -Force -AllowPrerelease:$AllowPrerelease -PassThru -RequiredVersion:$($found.Version.ToString()) -ErrorAction SilentlyContinue
         }
 
         if ($null -ne $installed) {
