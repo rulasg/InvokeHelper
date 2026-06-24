@@ -72,11 +72,15 @@ function Import-TestingHelper{
 
         $found = Find-Module @findParams
         if ($found) {
-            $installed = Install-Module -Name $found.Name -Force -AllowPrerelease:$AllowPrerelease -PassThru -RequiredVersion:$($found.Version.ToString()) -ErrorAction SilentlyContinue
+            try {
+                $installed = Install-Module -Name $found.Name -Force -AllowPrerelease:$AllowPrerelease -PassThru -RequiredVersion:$($found.Version.ToString()) -ErrorAction Stop
+            } catch {
+                throw "Unable to install module 'TestingHelper'. Error: $($_.Exception.Message)"
+            }
         }
 
         if ($null -ne $installed) {
-            $module = Import-Module -Name $installed.Name -RequiredVersion ($installed.Version.Split('-')[0]) -Force -PassThru
+            $module = Import-Module -Name $installed.Name -RequiredVersion ($installed.Version.ToString().Split('-')[0]) -Force -PassThru
         } else {
             throw "Unable to install module 'TestingHelper'. Ensure module repositories are registered and reachable."
         }
