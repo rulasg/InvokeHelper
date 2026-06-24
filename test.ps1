@@ -60,8 +60,26 @@ function Import-TestingHelper{
     $module = Import-Module TestingHelper -PassThru -ErrorAction SilentlyContinue -RequiredVersion:$semVer
 
     if ($null -eq $module) {
-        $installed = Install-Module -Name TestingHelper -Force -AllowPrerelease:$AllowPrerelease -passThru -RequiredVersion:$Version
-        $module = Import-Module -Name $installed.Name -RequiredVersion ($installed.Version.Split('-')[0]) -Force -PassThru
+        $findParams = @{
+            Name = "TestingHelper"
+            ErrorAction = "SilentlyContinue"
+            AllowPrerelease = $AllowPrerelease
+        }
+
+        if ($Version) {
+            $findParams.RequiredVersion = $Version
+        }
+
+        $found = Find-Module @findParams
+        if ($found) {
+            $installed = Install-Module -Name $found.Name -Force -AllowPrerelease:$AllowPrerelease -passThru -RequiredVersion:$found.Version
+        } else {
+            $installed = Install-Module -Name TestingHelper -Force -AllowPrerelease:$AllowPrerelease -passThru -RequiredVersion:$Version
+        }
+
+        if($null -ne $installed){
+            $module = Import-Module -Name $installed.Name -RequiredVersion ($installed.Version.Split('-')[0]) -Force -PassThru
+        }
     }
 
     if ($PassThru) {
