@@ -70,10 +70,11 @@ function Import-TestingHelper{
             $findParams.RequiredVersion = $Version
         }
 
+        $installed = $null
         $found = Find-Module @findParams
         if ($found) {
             try {
-                $installed = Install-Module -Name $found.Name -Force -AllowPrerelease:$AllowPrerelease -PassThru -RequiredVersion:$($found.Version.ToString()) -ErrorAction Stop
+                $installed = Install-Module -Name $found.Name -Force -PassThru -RequiredVersion:$($found.Version.ToString()) -ErrorAction Stop
             } catch {
                 throw "Unable to install module 'TestingHelper'. Error: $($_.Exception.Message)"
             }
