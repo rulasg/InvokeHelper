@@ -72,13 +72,15 @@ function Import-TestingHelper{
 
         $found = Find-Module @findParams
         if ($found) {
-            $installed = Install-Module -Name $found.Name -Force -AllowPrerelease:$AllowPrerelease -passThru -RequiredVersion:$found.Version
+            $installed = Install-Module -Name $found.Name -Force -AllowPrerelease:$AllowPrerelease -PassThru -RequiredVersion:$found.Version -ErrorAction SilentlyContinue
         } else {
-            $installed = Install-Module -Name TestingHelper -Force -AllowPrerelease:$AllowPrerelease -passThru -RequiredVersion:$Version
+            $installed = Install-Module -Name TestingHelper -Force -AllowPrerelease:$AllowPrerelease -PassThru -RequiredVersion:$Version -ErrorAction SilentlyContinue
         }
 
-        if($null -ne $installed){
+        if ($null -ne $installed) {
             $module = Import-Module -Name $installed.Name -RequiredVersion ($installed.Version.Split('-')[0]) -Force -PassThru
+        } else {
+            throw "Unable to install module 'TestingHelper'. Ensure module repositories are registered and reachable."
         }
     }
 
@@ -93,7 +95,7 @@ Import-TestingHelper -AllowPrerelease -Version "3.0.9-preview"
 # Test-ModulelocalPSD1 -ShowTestErrors:$ShowTestErrors
 # Test-ModulelocalPSD1 -ShowTestErrors:$ShowTestErrors -TestName StagingModuleTest_*
 
-if($TestName){
+if ($TestName) {
     Invoke-TestingHelper -TestName $TestName -ShowTestErrors:$ShowTestErrors
 } else {
     Invoke-TestingHelper -ShowTestErrors:$ShowTestErrors
